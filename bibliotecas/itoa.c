@@ -10,8 +10,10 @@ void reverse(char s[])
      }
 }
 
-//esta função não foi criada por mim. vi que não tinha a func itoa no meu system, 
-//então peguei do stack overflow (preguiça de implementar), por Keith Thompson. converte um inteiro n em string
+
+
+//i get this function in stackoverflow,  by Keith Thompson 
+
  void itoa(int n, char s[])
  {
      int i, sign;
