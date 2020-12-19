@@ -81,6 +81,14 @@ void calcT(struct tm *x, time_t y){
 	\/ 
 */
 int getAlphaNumber(int n){
+
+	//consts
+	const char[] numeric 			= "1234567890";
+	const char[] lowerAlpha 		= "abcdefghijklmnopqrstuvwxyz";
+	const char[] lowerAlpha 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	
+
+
 	char *key, comand[100];
 	char caracters[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int control[n], i, x, j, length = strlen(caracters), progress = 0;
@@ -134,15 +142,21 @@ int getAlphaNumber(int n){
 
 //===================================================================================================================
 /*
---  --
+-- verifyArgs --
+this function search for index of 'const *args[]' with 'n' elements that have string of '*find'
+and return -1 case have not found, or the index that have found
 	||
 	||
 	\/ 
 */
-int verifyArgs(char **args, char *find){
-	int retrn = 0
-
-
+int verifyArgs(char const *args[], char *find, int n){
+	for(int i = 0; i < n; i++){
+		if(!strcmp(args[i], find)){
+			return i;
+			break;
+		}
+	}
+	return -1;
 }
 //------------------------------------------------------------------------------------------------------------------
 
@@ -159,12 +173,15 @@ int verifyArgs(char **args, char *find){
 
 int main(int argc, char const *argv[]){
 		
-
-	//verify argv, if empty, show the comand for help (--help) 
-	if(argc < 2){
+	//VERIFY SINTAXE
+	//verify argv, in case of incorrect sintaxe show the comand for get help page (--help) 
+	if(argc != 2 && argc != 4 && argc != 6){
 		printf("\n[!] Sintaxe error! usage %s --help for more information\n\n", argv[0]);
 		exit(1);
 	}
+
+
+
 
 
 	/*
@@ -175,7 +192,7 @@ int main(int argc, char const *argv[]){
 		\/ 	
 	*/
 
-	if(argc >= 2 && !strcmp(argv[1], "--help")){
+	if(argc == 2 && !strcmp(argv[1], "--help")){
 		printf("\nPage Help\n");
 		//****** need write
 		return 0;
@@ -184,34 +201,38 @@ int main(int argc, char const *argv[]){
 
 	
 
+	//vars
+	int length, keyParamters;
+	char *specialCharacters;
+	struct tm *tempExec;
+	time_t sec_ini, sec_end;
+
+
 	/*
 	-------------------------------------------------------------
-	ferify the args, set the characters that will be tested
+	set the characters that will be tested
 		||
 		||
 		\/
 	*/
 
+	// switch(argc){
+	// 	case 2:
+	// 		length = 8;
+	// 		keyParamters = 7;
+	// 		specialCharacters = NULL;
+	// 	break;
+
+	// 	case 4:
+
+	// 	break;
+
+	// }
 
 
-
-	//---------------------------------------------
-
-
-	//vars
-	int caracters;
-	struct tm *tempExec;
-	time_t sec_ini, sec_end;
-
-
-	//consts
-	const char[] numeric 			= "1234567890";
-	const char[] lowerAlpha 		= "abcdefghijklmnopqrstuvwxyz";
-	const char[] lowerAlpha 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	//APAGAR, APENAS PARA TESTE:
 	
-
 	
-
 
 	//================================================
 	/*			
