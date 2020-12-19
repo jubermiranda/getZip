@@ -1,3 +1,10 @@
+/*
+Copyright Notice
+
+i get this function in stackoverflow,  by Keith Thompson
+
+*/
+
 void reverse(char s[])
  {
      int i, j;
@@ -12,7 +19,6 @@ void reverse(char s[])
 
 
 
-//i get this function in stackoverflow,  by Keith Thompson 
 
  void itoa(int n, char s[])
  {
