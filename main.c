@@ -30,7 +30,7 @@
 		sudo apt install libzip-dev
 
 */
-//=============================
+//===============================
 // --- header ---			//
 #include <stdio.h>			//
 #include <stdlib.h>			//
@@ -38,15 +38,19 @@
 #include <string.h>			//
 #include <math.h>			//
 #include <zip.h> 			//
-//-----------------------------
+//-------------------------------
 
 
 
 //===================================================================================================================
 /* 
---- calcT ---
+-- calcT --
 function for convert (time_t) 'y' (contains seconds) in format hours, minutes and seconds into var (struct tm) 'x'
 see the documentation of time.h library for more information about the types and structures (time_t, struct tm) 
+
+	||
+	||
+	\/ 
 */
 void calcT(struct tm *x, time_t y){
 	x->tm_hour = 0;
@@ -71,7 +75,10 @@ void calcT(struct tm *x, time_t y){
 
 //===================================================================================================================
 /*
---- getAlphaNumber --- 
+-- getAlphaNumber ---
+	||
+	||
+	\/ 
 */
 int getAlphaNumber(int n){
 	char *key, comand[100];
@@ -127,12 +134,33 @@ int getAlphaNumber(int n){
 
 //===================================================================================================================
 /*
---- MAIN ---
+--  --
+	||
+	||
+	\/ 
 */
-int main(int argc, char const *argv[]){
-	
+int verifyArgs(char **args, char *find){
+	int retrn = 0
 
-	//verify argv, if empty, the show the comand for help (--help) 
+
+}
+//------------------------------------------------------------------------------------------------------------------
+
+
+
+
+//===================================================================================================================
+/*
+-- MAIN --
+	||
+	||
+	\/ 
+*/
+
+int main(int argc, char const *argv[]){
+		
+
+	//verify argv, if empty, show the comand for help (--help) 
 	if(argc < 2){
 		printf("\n[!] Sintaxe error! usage %s --help for more information\n\n", argv[0]);
 		exit(1);
@@ -140,23 +168,35 @@ int main(int argc, char const *argv[]){
 
 
 	/*
+	--------------------------------------------------
 	help page by comand [--help]
+		||
+		||
+		\/ 	
 	*/
-	if(argc == 2 && !strcmp(argv[1], "--help")){
+
+	if(argc >= 2 && !strcmp(argv[1], "--help")){
 		printf("\nPage Help\n");
 		//****** need write
 		return 0;
 	}
+	//-----------------------------------------------
+
+	
 
 	/*
-	validation of the argvs
+	-------------------------------------------------------------
+	ferify the args, set the characters that will be tested
+		||
+		||
+		\/
 	*/
 
-	//begin validation
 
-		//code here
 
-	//end validação
+
+	//---------------------------------------------
+
 
 	//vars
 	int caracters;
@@ -164,24 +204,35 @@ int main(int argc, char const *argv[]){
 	time_t sec_ini, sec_end;
 
 
+	//consts
+	const char[] numeric 			= "1234567890";
+	const char[] lowerAlpha 		= "abcdefghijklmnopqrstuvwxyz";
+	const char[] lowerAlpha 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
 
-	//standart
-	printf("Numbers of caracteres:\n");
-	scanf("%d", &caracters);
+	
 
+
+	//================================================
+	/*			
+	DESCRIPTION AND COUNT TIME
+		||
+		||
+		\/ 
+	*/
 	time(&sec_ini);
-
 	getAlphaNumber(caracters);
-	
 	time(&sec_end);
-
-
-	//calc the execution time of the program
+	
 	time_t dif = difftime(sec_end, sec_ini);
 	calcT(tempExec, dif);
+	//------------------------------------------------
 
-	//SHOW, finish 
-	printf("\n[+]Sucess!\nAll keys in %d hours, %d min and %d sec\n\n", (*tempExec).tm_hour, (*tempExec).tm_min, (*tempExec).tm_sec);
+
+	//=============================================================
+	// show result
+	printf("\n[+]Sucess!\nAll keys in %d hours, %d min and %d sec\n\n", 
+	(*tempExec).tm_hour, (*tempExec).tm_min, (*tempExec).tm_sec);
 	return 0;
+	//---------------------------------------------
 }
