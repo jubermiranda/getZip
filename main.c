@@ -75,22 +75,20 @@ void calcT(struct tm *x, time_t y){
 
 //===================================================================================================================
 /*
--- getAlphaNumber ---
+-- descriptZip ---
 	||
 	||
 	\/ 
 */
-int getAlphaNumber(int n){
+int descriptZip(char *caracters, int n, char *key){
 
 	//consts
-	const char[] numeric 			= "1234567890";
-	const char[] lowerAlpha 		= "abcdefghijklmnopqrstuvwxyz";
-	const char[] lowerAlpha 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const char* numeric 			= "1234567890";
+	const char* lowerAlpha 		= "abcdefghijklmnopqrstuvwxyz";
+	const char* upperAlpha 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-
-
-	char *key, comand[100];
-	char caracters[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	//vars
+	zip_file_t *archDescript;
 	int control[n], i, x, j, length = strlen(caracters), progress = 0;
 
 	for(i=0; i < n; i++){ 
@@ -113,6 +111,8 @@ int getAlphaNumber(int n){
 			for(j=0; j < length; j++){
 				key[i] = caracters[j];
 				printf("%s\t", key);
+				
+
 				//sprintf(comand, "unzip -P %s -B -qq teste1.zip\n", key);
 				//system(comand);
 				progress++;
@@ -242,7 +242,7 @@ int main(int argc, char const *argv[]){
 		\/ 
 	*/
 	time(&sec_ini);
-	getAlphaNumber(caracters);
+	descriptZip(caracters);
 	time(&sec_end);
 	
 	time_t dif = difftime(sec_end, sec_ini);
