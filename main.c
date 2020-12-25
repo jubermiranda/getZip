@@ -80,16 +80,36 @@ void calcT(struct tm *x, time_t y){
 	||
 	\/ 
 */
-int descriptZip(char *caracters, int n, char *key){
+//int descriptZip(char *source, char *caracters, int n, char *key){
+int descriptZip(int n, char *archive){
 
 	//consts
-	const char* numeric 			= "1234567890";
+	const char* numeric 		= "1234567890";
 	const char* lowerAlpha 		= "abcdefghijklmnopqrstuvwxyz";
 	const char* upperAlpha 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	
+
+	char caracters[37] = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	char *key;
+
 	//vars
+	struct zip *za;
+    struct zip_file *zf;
+    struct zip_stat sb;
+    char buf[100];
+    int err, testeExtr;
+
 	zip_file_t *archDescript;
 	int control[n], i, x, j, length = strlen(caracters), progress = 0;
+
+	//abrindo o arquivo zip
+	if(strstr(get_ext(archive), "zip") == NULL)
+    {
+        return -1;
+    }
+
+    if ((za = zip_open(archive, 0, &err)) == NULL) {
+        return -1;
+    }
 
 	for(i=0; i < n; i++){ 
 
@@ -110,11 +130,16 @@ int descriptZip(char *caracters, int n, char *key){
 			//for para mudar o ultimo caractere com todas as possibilidades
 			for(j=0; j < length; j++){
 				key[i] = caracters[j];
-				printf("%s\t", key);
-				
+				//printf("%s\t", key);
 
-				//sprintf(comand, "unzip -P %s -B -qq teste1.zip\n", key);
-				//system(comand);
+				//testando a senha atual
+				int testExtract(char *key, struct zip *za, struct zip_stat sb, char buf[100]){
+				testeExtr = testExtract(key, za, &sb, buf);
+
+				if(testeExtr)
+					continue;
+				else
+					return 0;
 				progress++;
 			}
 
@@ -128,14 +153,69 @@ int descriptZip(char *caracters, int n, char *key){
 				key[j] = caracters[control[j]];
 			}
 			key[0] = caracters[control[0]];
-			system("clear");
-			printf("%.2f \%\n", (float) (progress*100)/pow(length, n));
-
+			// system("clear");
+			// printf("\n\n[%.2f \%]\n", (float) (progress*100)/pow(length, n));
 		}
 
 	}
 }
 //------------------------------------------------------------------------------------------------------------------
+
+
+
+
+int testExtract(char *key, struct zip *za, struct zip_stat sb, char buf[100]){
+
+    
+    int i, len;
+    int fd;
+    long long sum;
+    
+        
+    zip_set_default_password(za, key);
+
+        for (i = 0; i < zip_get_num_entries(za, 0); i++) {
+            if (zip_stat_index(za, i, 0, &sb) == 0) {
+                printf("==================\n");
+                len = strlen(sb.name);
+                printf("Name: [%s], ", sb.name);
+                printf("Size: [%llu], ", sb.size);
+                printf("mtime: [%u]\n", (unsigned int)sb.mtime);
+                if (sb.name[len - 1] == '/') {
+                    safe_create_dir(sb.name);
+                } else {
+                    zf = zip_fopen_index(za, i, 0);
+                    if (!zf) {
+                        goto final;
+                    }
+     
+                    fd = open(sb.name, O_RDWR | O_TRUNC | O_CREAT, 0644);
+                    if (fd < 0) {
+                        goto final;
+                    }
+
+                    sum = 0;
+                    while (sum != sb.size) {
+                        len = zip_fread(zf, buf, 100);
+                        if (len < 0) {
+                            goto final;
+                        }
+                        write(fd, buf, len);
+                        sum += len;
+                    }
+                    close(fd);
+                    zip_fclose(zf);
+                }
+            } else {
+                printf("File[%s] Line[%d]\n", __FILE__, __LINE__);
+            }
+        }
+    if (zip_close(za) == -1) {
+        return -1;
+    }
+    printf("SUCESS!!\nkey: %s\n", key);
+    return 0;
+}
 
 
 
@@ -242,7 +322,7 @@ int main(int argc, char const *argv[]){
 		\/ 
 	*/
 	time(&sec_ini);
-	descriptZip(caracters);
+	descriptZip(8);
 	time(&sec_end);
 	
 	time_t dif = difftime(sec_end, sec_ini);
